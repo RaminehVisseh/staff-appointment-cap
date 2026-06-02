@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Staff Appointment Cap — Prototype Handoff</title>
+<style>
+  :root {
+    --teal: #2C9498;
+    --teal-dark: #1F7378;
+    --teal-light: #E8F4F4;
+    --amber: #E8A33D;
+    --amber-light: #FBF1DE;
+    --red: #C85248;
+    --bg: #FAFAFA;
+    --card-bg: #FFFFFF;
+    --border: #E2E2E2;
+    --text: #2C2C2C;
+    --text-muted: #6B6B6B;
+    --text-dim: #9A9A9A;
+    --gold: #D4AB3F;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 24px 80px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .container { max-width: 880px; margin: 0 auto; }
+  header { margin-bottom: 32px; }
+  .eyebrow {
+    color: var(--teal);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 6px;
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--text);
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 700px;
+  }
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 40px 0 12px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 22px 0 6px;
+    color: var(--text);
+  }
+  p { margin: 0 0 12px; }
+  ul, ol { margin: 0 0 16px; padding-left: 22px; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F0F0F0;
+    color: var(--teal-dark);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+  }
+  pre {
+    background: #1F2329;
+    color: #E5E9F0;
+    padding: 14px 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+  }
+  .callout {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin: 16px 0;
+    color: var(--teal-dark);
+    font-size: 14px;
+  }
+  .callout strong { color: var(--teal-dark); }
+  .warn {
+    background: var(--amber-light);
+    border-left: 3px solid var(--amber);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin: 16px 0;
+    color: #6F5320;
+    font-size: 14px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 16px;
+    font-size: 14px;
+  }
+  th, td {
+    text-align: left;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: #F5F5F5;
+    font-weight: 600;
+    color: var(--text);
+  }
+  td code { white-space: nowrap; }
+  .flow {
+    counter-reset: step;
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0 18px;
+  }
+  .flow li {
+    counter-increment: step;
+    position: relative;
+    padding: 8px 0 8px 40px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .flow li:last-child { border-bottom: none; }
+  .flow li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .meta {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .meta strong { color: var(--text); }
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 10px;
+    background: #eaeaea;
+    color: #444;
+  }
+  .pill.full { background: var(--teal); color: white; }
+  .pill.gold { background: var(--gold); color: white; width: 24px; height: 22px; padding: 2px 0; text-align: center; border-radius: 50%; }
+  .nav-list { margin: 8px 0; }
+  .nav-list a { color: var(--teal); text-decoration: none; font-weight: 500; }
+  .nav-list a:hover { text-decoration: underline; }
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <p class="eyebrow">Prototype handoff</p>
+  <h1>Staff Appointment Cap</h1>
+  <p class="lede">
+    A working Vite + React + Burrito prototype that demonstrates the per-practitioner daily booking
+    limit feature, the admin override flow when a practitioner is at cap, and the at-a-glance
+    availability indicator on the Schedule view.
+  </p>
+</header>
+
+<div class="meta">
+  <div><strong>Owner:</strong> Ramineh Visseh</div>
+  <div><strong>Location:</strong> <code>~/burrito-brain-demo/staff-appointment-cap</code></div>
+  <div><strong>Status:</strong> Prototype / design exploration</div>
+  <div><strong>Built with:</strong> Vite · React 18 · TypeScript · Burrito Design System · JaneNavBar</div>
+</div>
+
+<div class="nav-list">
+  <a href="#what">What it demonstrates</a> ·
+  <a href="#flows">User flows</a> ·
+  <a href="#decisions">Design decisions</a> ·
+  <a href="#components">Components used</a> ·
+  <a href="#run">How to run</a> ·
+  <a href="#mocked">What's mocked</a> ·
+  <a href="#open">Open questions</a>
+</div>
+
+<h2 id="what">What it demonstrates</h2>
+<ul>
+  <li><strong>Per-practitioner daily cap.</strong> Each practitioner can set their own limit on bookings per day. New clinicians might cap at 4; experienced ones at 8.</li>
+  <li><strong>Caps apply to online booking only.</strong> When a practitioner hits their cap, online booking pauses for the day. Admins can still book manually from the schedule.</li>
+  <li><strong>Admin override with confirmation.</strong> When an admin attempts to book past the cap, a modal explains the situation and offers <em>Cancel</em> or <em>Book Anyway</em>.</li>
+  <li><strong>At-a-glance availability indicator.</strong> Each practitioner column on the Schedule shows their current booking count or a "Full" pill, with a hover tooltip giving the exact state.</li>
+  <li><strong>Reserved slot affordance.</strong> While the New Appointment panel is open, the chosen time appears as a dashed "Reserved" block on the calendar so it's clear what's being booked.</li>
+</ul>
+
+<h2 id="flows">User flows</h2>
+
+<h3>Flow 1 — Practitioner sets a daily cap</h3>
+<ol class="flow">
+  <li>Click <strong>Staff</strong> in the top nav. Lands on the first staff member (Michael Carroll).</li>
+  <li>Click <strong>Susan Lo</strong> in the staff sidebar. Her profile loads.</li>
+  <li>Click the <strong>Edit / Settings</strong> tab in the profile header.</li>
+  <li>On the Edit page, click the <strong>Online Booking</strong> tab.</li>
+  <li>"Daily Booking Limit" defaults to <strong>No Limit</strong>. Click <strong>Set a Limit</strong>.</li>
+  <li>Type a number into <em>Appointments Bookable Online Per Day</em> (e.g., <code>6</code>).</li>
+  <li>Click <strong>Save</strong>. Returns to Susan's profile with a green toast:
+    <em>"Daily booking limit for Susan Lo updated to 6 appointments."</em>
+  </li>
+</ol>
+
+<h3>Flow 2 — Admin override booking past the cap</h3>
+<ol class="flow">
+  <li>Click <strong>Schedule</strong> in the top nav.</li>
+  <li>Susan Lo's column header shows a <span class="pill full">Full</span> pill next to her gold waitlist badge (<span class="pill gold">1</span>) when she's at cap.</li>
+  <li>Hover the <span class="pill full">Full</span> pill — tooltip reads <em>"6 out of 6 booked, daily cap reached. Online booking is paused for today."</em></li>
+  <li>Click any empty time row on Susan's column (e.g., 6 PM). The <strong>New Appointment</strong> panel slides in from the right, and a dashed <em>Reserved</em> block appears on her column at that time.</li>
+  <li>In the panel, pick a treatment (e.g., 30 Minute Massage). The Reserved block resizes to the treatment's duration.</li>
+  <li>Type into the Patient search (e.g., <strong>Mad</strong>) and pick <em>Madison Barnaby</em> from the autocomplete.</li>
+  <li>Click <strong>Book Appointment</strong>. Because Susan is at cap, the override modal appears:
+    <em>"This practitioner has reached their daily booking limit."</em>
+  </li>
+  <li>Click <strong>Book Anyway</strong>. The appointment is added to Susan's column, the panel closes, and a success toast confirms.</li>
+</ol>
+
+<h2 id="decisions">Key design decisions</h2>
+
+<div class="card">
+  <h3 style="margin-top:0">Availability badge sits next to the waitlist circle</h3>
+  <p>The existing gold circular badge in each practitioner column is the waitlist count and must not be confused with the new availability indicator. The two now sit side by side in the column header:</p>
+  <ul>
+    <li><strong>Availability:</strong> rectangular pill, teal "Full" or grey "X/Y booked", positioned immediately before the waitlist circle.</li>
+    <li><strong>Waitlist:</strong> existing gold circle, single number, unchanged.</li>
+  </ul>
+  <p>Differentiation strategies stacked: <em>different shape</em> (pill vs circle), <em>different color</em> (teal/grey vs gold), <em>different content</em> (fraction or word vs single number).</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">"Full" uses brand teal, not red</h3>
+  <p>An earlier iteration used red for the Full state. Reasoning for switching: red reads as <em>error</em>, but a fully-booked day is a normal, positive state. Teal matches the rest of Jane's chrome and reads as "this is your normal full-day state." The tooltip text still communicates the implication clearly.</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">Override modal — soft friction, not hard friction</h3>
+  <p>The override modal explains <em>why</em> booking is paused (online booking only) and offers <em>Cancel</em> or <em>Book Anyway</em> with no required reason field. Reasoning: this feature exists to enable flexibility for clinic exceptions; a reason-required modal would feel punitive for legitimate admin overrides.</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">Reserved slot visible while panel is open</h3>
+  <p>When the New Appointment panel opens, a dashed grey "Reserved" block is drawn on the practitioner's column at the chosen time. It resizes to match the selected treatment's duration. This gives the admin a visual confirmation of what they're about to book before they click Book Appointment.</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">Cancellations auto-reopen slots (out of scope for this prototype)</h3>
+  <p>The original spec includes: <em>"When a patient cancels, the slot automatically becomes available again if the practitioner is under the cap."</em> This is silent backend logic with no UI surface in this prototype, but should be reflected in the schedule indicator (count decrements) and online booking re-enables.</p>
+</div>
+
+<h2 id="components">Burrito components used</h2>
+<table>
+  <thead>
+    <tr><th>Component</th><th>Where</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>BurritoProvider</code></td><td><code>main.tsx</code></td><td>Wraps the app.</td></tr>
+    <tr><td><code>JaneNavBar</code></td><td>Every page</td><td>Canonical nav (per <code>burrito-brain-demo/CLAUDE.md</code>). Extended with an optional <code>onNavClick</code> callback so the prototype can route between pages.</td></tr>
+    <tr><td><code>Heading</code></td><td>Page titles, section headers</td><td><code>level</code> only — no <code>size</code> prop.</td></tr>
+    <tr><td><code>Text</code></td><td>Body copy, captions</td><td><code>size="sm" | "md" | "lg"</code>. Used <code>sm</code> throughout for compact Jane-density layout.</td></tr>
+    <tr><td><code>Button</code> · <code>PrimaryButton</code> · <code>CriticalButton</code></td><td>Actions throughout</td><td>Primary used for Save / Book Anyway / Book Appointment. Critical used for Delete Staff Member.</td></tr>
+    <tr><td><code>Checkbox</code></td><td>"Enable Online Booking"</td><td>Native <code>checked</code> + <code>onChange={(e) =&gt; e.target.checked}</code>.</td></tr>
+    <tr><td><code>Radio</code></td><td>"No Limit" / "Set a Limit"</td><td>Wrapped in <code>Fieldset</code> + <code>FormField</code>. <code>name</code> + <code>value</code> + <code>checked</code>, native <code>onChange</code>.</td></tr>
+    <tr><td><code>NumberInput</code></td><td>"Appointments Bookable Online Per Day"</td><td>Native HTML number input under the hood.</td></tr>
+    <tr><td><code>Select</code> · <code>Select.Option</code></td><td>Treatment, Rolling Availability, etc.</td><td>Native <code>&lt;select&gt;</code> wrapper. Use <code>value</code> + <code>onChange</code> + <code>placeholder</code>.</td></tr>
+    <tr><td><code>Fieldset</code> · <code>Fieldset.Legend</code></td><td>Radio group</td><td>Subcomponent API, not props.</td></tr>
+    <tr><td><code>FormField</code> · <code>FormField.Label</code> · <code>FormField.HelperText</code></td><td>Form layouts</td><td>Subcomponent API. Helper text used to mirror Jane's inline descriptions.</td></tr>
+    <tr><td><code>Modal</code> · <code>useModal</code></td><td>Admin override confirmation</td><td>Uses the <code>Modal.Header</code> / <code>Modal.Content</code> / <code>Modal.Footer</code> subcomponents. Triggered from the panel's Book Appointment button, not from the slot click.</td></tr>
+    <tr><td><code>Toaster</code> · <code>showToast</code></td><td>Save confirmation, booking confirmation</td><td>Single <code>&lt;Toaster /&gt;</code> at app root; <code>showToast</code> called imperatively.</td></tr>
+    <tr><td><code>vars.global.color.brand['70']</code></td><td>Teal accents throughout</td><td>Used for tab highlights, nav link, accent text, "Full" pill background.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>Note on JaneNavBar:</strong> a small extension was added to the canonical component — an optional <code>onNavClick(label: string) =&gt; void</code> callback. This is used by the prototype to route between the Schedule, Staff, and Day pages without recreating the nav. The component still supports its full original API.
+</div>
+
+<h2 id="run">How to run locally</h2>
+<pre><code>cd ~/burrito-brain-demo/staff-appointment-cap
+npm install
+npm run dev
+# open http://localhost:5173</code></pre>
+
+<p>
+  The project uses the standard Burrito setup documented in
+  <code>burrito-brain-demo/CLAUDE.md</code>. Burrito is installed via the
+  scoped <code>@janeapp</code> npm registry — make sure your local
+  <code>.npmrc</code> auth token is fresh if a clean install is needed.
+</p>
+
+<h2 id="mocked">What's mocked / known limitations</h2>
+<ul>
+  <li><strong>Cap state is global, not per-staff.</strong> The cap form only persists for Susan Lo (the demo target). Editing other staff shows the same form but the change isn't reflected anywhere else in the prototype.</li>
+  <li><strong>The Schedule view shows only 4 practitioner columns.</strong> Jo-Ellen McKay (uncapped, no pill), Amy Kendrick (3/8 booked), Susan Lo (Full at her configured cap), Michael Carroll (3/8 booked).</li>
+  <li><strong>Patient autocomplete is a fixed list of 6 names.</strong> Madison Barnaby is pre-populated for the demo flow.</li>
+  <li><strong>Appointments are stored in component state.</strong> Refreshing the page resets everything. A new "Book Anyway" booking appears on Susan's column for the session but does not persist.</li>
+  <li><strong>Tabs other than "Profile" / "Edit/Settings" / "Online Booking" are non-interactive.</strong> They render but don't navigate.</li>
+  <li><strong>No mobile breakpoints.</strong> Layout is desktop-first; mobile design exists as a separate HTML sketch in the design exploration (status strip below practitioner header).</li>
+  <li><strong>Cancellations auto-reopen logic is not implemented.</strong> Currently no UI affordance for this; backend-only behavior assumed.</li>
+</ul>
+
+<h2 id="open">Open questions for dev review</h2>
+<ol>
+  <li><strong>Cap unit.</strong> Per-day is the default in this prototype. Should clinics also be able to cap per shift (AM vs PM)? Field research suggests most clinics need per-day only, but worth confirming.</li>
+  <li><strong>Cap-per-appointment-type.</strong> Currently the cap counts all appointment types equally. Should there be a way to set "max 4 intakes/day but unlimited follow-ups"? Almost certainly V2+.</li>
+  <li><strong>Group appointments.</strong> Does a group session count as 1 toward the cap, or N (one per attendee)? Decision needed before backend work.</li>
+  <li><strong>No-shows and cancellations.</strong> Confirmation on counting rules: no-shows count until marked, cancellations free up slots immediately.</li>
+  <li><strong>Audit log for overrides.</strong> Should clinics see a report of admin overrides? If so, where does it live?</li>
+  <li><strong>Surfacing the cap on the online booking site.</strong> When a practitioner is at cap, the patient-facing booking site shows "No Availability" for all days. Should there be an alternate message that's more informative ("Currently fully booked — try next week")?</li>
+  <li><strong>Mobile schedule view.</strong> The "Full" pill doesn't fit in narrow mobile columns. Proposed solution: a thin colored status strip below the practitioner header. Worth confirming with dev.</li>
+</ol>
+
+<footer>
+  Built with Burrito Design System · See <code>burrito-brain-demo/CLAUDE.md</code> for repo conventions.
+</footer>
+
+</div>
+</body>
+</html>
